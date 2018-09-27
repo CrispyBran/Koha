@@ -598,10 +598,13 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
         $ri{barcode}             = $bar_code;
         $ri{homebranch}          = $item->homebranch;
         $ri{holdingbranch}       = $item->holdingbranch;
+        $ri{location}            = $item->location;
+        $ri{permlocation}        = $item->permanent_location;
 
-        $ri{location} = $item->location;
         my $shelfcode = $ri{'location'};
-        $ri{'location'} = $shelflocations->{$shelfcode} if ( defined( $shelfcode ) && defined($shelflocations) && exists( $shelflocations->{$shelfcode} ) );
+        my $permshelfcode = $ri{'permlocation'};
+        $ri{'location'} = ( $shelflocations->{$permshelfcode} ne '' ) ? $shelflocations->{$permshelfcode} : ( $permshelfcode ) ? $permshelfcode : undef;
+        $ri{'location'} .= ( ( $shelflocations->{$shelfcode} ne '' ) && ( $shelfcode ne $permshelfcode ) ) ? ' (' . $shelflocations->{$shelfcode} . ')' : ( ( $shelfcode ) && ( $shelfcode ne $permshelfcode ) ) ? ' (' . $shelfcode . ')' : undef;
 
     }
     else {
