@@ -253,8 +253,6 @@ foreach my $item (@items) {
 
     #get shelf location and collection code description if they are authorised value.
     # same thing for copy number
-    my $shelfcode = $item->{'location'};
-    $item->{'location'} = $shelflocations->{$shelfcode} if ( defined( $shelfcode ) && defined($shelflocations) && exists( $shelflocations->{$shelfcode} ) );
     my $ccode = $item->{'ccode'};
     $item->{'ccode'} = $collections->{$ccode} if ( defined( $ccode ) && defined($collections) && exists( $collections->{$ccode} ) );
     my $copynumber = $item->{'copynumber'};
