@@ -170,36 +170,35 @@
     </div>
 [% END %]
 
-<!-- case of a mistake in transfer loop -->
-[% IF ( WrongTransfer ) %]
-    <div id="return2" class="dialog message">
-        <!-- WrongTransfer -->
-        <h3>Please return item to: [% Branches.GetName( TransferWaitingAt ) | html %]</h3>
-            <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | html %]">[% itembarcode | html %]: [% title | html %]</a></p>
-        <button type="submit" class="openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | html %]&amp;&amp;branchcode=[% TransferWaitingAt | html %]&amp;op=slip"><i class="fa fa-print"></i> Print transfer slip</button>
-        <button class="deny" type="submit" onclick="window.location.href='/cgi-bin/koha/circ/returns.pl?itemnumber=[% itemnumber | html %]&amp;canceltransfer=1'"><i class="fa fa-times"></i> Cancel transfer</button>
-[% IF ( patron.cardnumber ) %]<h5>Hold for:</h5>
-        <ul>
-            <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | html %]">
-            [% patron.surname | html %], [% patron.firstname | html %]</a> ([% patron.cardnumber | html %]) <span class="patron-category"> - [% patron.category.description | html %]</span> </li>
-            [% INCLUDE display_holdpatron_address %]
-            [% IF ( patron.phone ) %]<li>[% patron.phone | html %]</li>[% END %]
-            [% IF ( patron.email ) %]<li><a id="boremail" href="mailto:[% patron.email | html %]">[% patron.email | html %]</a></li>[% END %]
-        </ul>
+<!-- Item needs to be transferred -->
+[% IF ( transfer || ( WrongTransfer && !reserved ) ) %]
+    <div id="transfer1" class="modal fade audio-alert-action">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form method="post" action="returns.pl" class="confirm">
+                    <div class="modal-header">
+                        <h3>
+                            Please return item to: [% Branches.GetName( returnbranch ) | html %]
+                            <br />
+                            <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | html %]">[% itembarcode | html %]: [% title | html %]
+                            </a>
+                        </h3>
+                    </div>
+                    <div class="modal-body">
 
-    <form method="post" action="returns.pl" class="confirm">
-            <input type="hidden" name="WT-itemNumber" value="[% WrongTransferItem | html %]" />
-            <input type="hidden" name="WT-waitingAt" value="[% TransferWaitingAt | html %]" />
-            <input type="hidden" name="WT-From" value="[% wtransfertFrom | html %]" />
-            <button type="submit" class="approve"><i class="fa fa-check"></i> Confirm</button>
-            <input type="hidden" name="print_slip" value="0" />
-            <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
-            <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
-            <button type="submit" class="print" onclick="this.form.print_slip.value = 1; this.form.submit();"><i class="fa fa-print"></i> Print slip and confirm</button>
-        <input type="hidden" name="return_date_override" value="[% return_date_override | html %]" />
-        <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember | html %]" />
-    </form>
-    [% END %]</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-default approve" data-dismiss="modal">
+                            <i class="fa fa-check"></i> Confirm
+                        </button>
+                        <button type="button" class="openWin btn btn-default print" data-url="transfer-slip.pl?transferitem=[% itemnumber | html %]&amp;branchcode=[% returnbranch | html %]&amp;op=slip" onclick="this.form.submit();"><i class="fa fa-print"></i> Print slip and confirm
+
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 [% END %]
 
 [% IF ( found ) %]
@@ -334,15 +333,6 @@
             <input type="hidden" name="return_date_override" value="[% return_date_override | html %]" />
             <input type="hidden" name="return_date_override_remember" value="[% return_date_override_remember | html %]" />
         </form>
-		</div>
-    [% END %]
-
-    [% IF ( transfer ) %]
-    <!-- transfer: item with no reservation, must be returned according to home library circulation rules -->
-        <div id="return1" class="dialog message audio-alert-action">
-            <h3>Please return item to: [% Branches.GetName( returnbranch ) | html %]</h3>
-            <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | html %]">[% itembarcode | html %]: [% title | html %]</a></p>
-            <p><button type="button" class="openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | html %]&amp;branchcode=[% returnbranch | html %]&amp;op=slip"><i class="fa fa-print"></i> Print slip</button></p>
         </div>
     [% END %]
 

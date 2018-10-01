@@ -448,6 +448,8 @@ if ( $messages->{'ResFound'}) {
         if ( $reserve->{'ResFound'} eq "Waiting" ) {
             $template->param(
                 waiting      => ($userenv_branch eq $reserve->{'branchcode'} ? 1 : 0 ),
+                transfertodo => ($userenv_branch eq $reserve->{'branchcode'} ? 0 : 1 ),
+                reserved     => 1,
             );
         } elsif ( $reserve->{'ResFound'} eq "Reserved" ) {
             $template->param(
