@@ -682,9 +682,6 @@ if ( not $viewallitems and @items > $max_items_to_display ) {
     $itm->{'ccode'} = $collections->{$ccode} if defined($ccode) && $collections && exists( $collections->{$ccode} );
     my $copynumber = $itm->{'copynumber'};
     $itm->{'copynumber'} = $copynumbers->{$copynumber} if ( defined($copynumbers) && defined($copynumber) && exists( $copynumbers->{$copynumber} ) );
-    if ( defined $itm->{'location'} ) {
-        $itm->{'location_description'} = $shelflocations->{ $itm->{'location'} };
-    }
     if (exists $itm->{itype} && defined($itm->{itype}) && exists $itemtypes->{ $itm->{itype} }) {
         $itm->{'imageurl'}    = getitemtypeimagelocation( 'opac', $itemtypes->{ $itm->{itype} }->{'imageurl'} );
         $itm->{'description'} = $itemtypes->{ $itm->{itype} }->{translated_description};

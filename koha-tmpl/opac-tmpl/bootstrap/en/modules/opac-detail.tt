@@ -1240,7 +1240,12 @@
                             <div class="branch-info-tooltip">[% ITEM_RESULT.holding_branch_opac_info | $raw %]</div>
 
                             [% IF ( Koha.Preference('OpacLocationOnDetail') == 'holding' || Koha.Preference('OpacLocationOnDetail') == 'both' ) %]
-                                <span class="shelvingloc">[% ITEM_RESULT.location_description | html %]</span>
+                                <span class="shelvingloc">
+                                    [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => ITEM_RESULT.permanent_location, opac => '1' ) | html %]
+                                    [% IF ITEM_RESULT.location AND ITEM_RESULT.location != ITEM_RESULT.permanent_location %]
+                                        ([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => ITEM_RESULT.location, opac => '1' ) | html %])
+                                    [% END %]
+                                </span>
                             [% END %]
 
                         </td>
@@ -1265,7 +1270,12 @@
                             <div class="branch-info-tooltip">[% ITEM_RESULT.home_branch_opac_info | $raw %]</div>
 
                             [% IF ( Koha.Preference('OpacLocationOnDetail') == 'home' || Koha.Preference('OpacLocationOnDetail') == 'both' ) %]
-                                <span class="shelvingloc">[% ITEM_RESULT.location_description | html %]</span>
+                                <span class="shelvingloc">
+                                    [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => ITEM_RESULT.permanent_location, opac => '1' ) | html %]
+                                    [% IF ITEM_RESULT.location AND ITEM_RESULT.location != ITEM_RESULT.permanent_location %]
+                                        ([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => ITEM_RESULT.location, opac => '1' ) | html %])
+                                    [% END %]
+                                </span>
                             [% END %]
 
                         </td>
