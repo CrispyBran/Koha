@@ -86,8 +86,9 @@ sub GetDescriptionByKohaField {
             ? $params->{opac}
                 ? $av->{opac_description}
                 : $av->{lib}
-            : ''; # Maybe we should return $params->{authorised_value}?
-
+            : $params->{authorised_value}
+                ? $params->{authorised_value}
+                : ''
 }
 
 1;
